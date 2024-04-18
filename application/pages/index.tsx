@@ -1,103 +1,71 @@
-import { ConnectWallet } from "@thirdweb-dev/react";
 import styles from "../styles/Home.module.css";
-import Image from "next/image";
+import {
+  ConnectWallet,
+  useAddress,
+  useOwnedNFTs,
+  useEditionDrop,
+  darkTheme,
+  lightTheme,
+} from "@thirdweb-dev/react";
+import HammerAbi from "../constants/ABIs/hammer.json";
+import { Hammer, sleepingEllie } from "../constants/contractAdresses";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import MintNft from "../components/MintNft";
 
 const Home: NextPage = () => {
-  return (
-    <main className={styles.main}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>
-            Welcome to{" "}
-            <span className={styles.gradientText0}>
-              <a
-                href="https://thirdweb.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                thirdweb.
-              </a>
-            </span>
-          </h1>
+  const editionDrop = useEditionDrop(sleepingEllie);
+  const router = useRouter();
+  const address = useAddress();
 
-          <p className={styles.description}>
-            Get started by configuring your desired network in{" "}
-            <code className={styles.code}>src/index.js</code>, then modify the{" "}
-            <code className={styles.code}>src/App.js</code> file!
-          </p>
+  const {
+    data: ownedNfts,
+    isLoading,
+    isError,
+  } = useOwnedNFTs(editionDrop, address);
 
-          <div className={styles.connect}>
-            <ConnectWallet />
-          </div>
-        </div>
+  //button style
+  const customDarkTheme = darkTheme({
+    fontFamily: "Inter, sans-serif",
+    colors: {
+      modalBg: "#6c4591",
+      accentText: "red",
+      // ... etc
+    },
+  });
 
-        <div className={styles.grid}>
-          <a
-            href="https://portal.thirdweb.com/"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/portal-preview.png"
-              alt="Placeholder preview of starter"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText1}>Portal ➜</h2>
-              <p>
-                Guides, references, and resources that will help you build with
-                thirdweb.
-              </p>
-            </div>
-          </a>
-
-          <a
-            href="https://thirdweb.com/dashboard"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/dashboard-preview.png"
-              alt="Placeholder preview of starter"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText2}>Dashboard ➜</h2>
-              <p>
-                Deploy, configure, and manage your smart contracts from the
-                dashboard.
-              </p>
-            </div>
-          </a>
-
-          <a
-            href="https://thirdweb.com/templates"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/templates-preview.png"
-              alt="Placeholder preview of templates"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText3}>Templates ➜</h2>
-              <p>
-                Discover and clone template projects showcasing thirdweb
-                features.
-              </p>
-            </div>
-          </a>
-        </div>
+  // Wallet Connect to check owned Nfts
+  if (!address) {
+    return (
+      <div>
+        <ConnectWallet theme={customDarkTheme} />
       </div>
-    </main>
+    );
+  }
+
+  //Get Owned Nfts
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  //error occurs
+  if (!ownedNfts || isError) {
+    return <div>Error</div>;
+  }
+
+  //if user have no NFTs
+  if (ownedNfts.length === 0) {
+    return (
+      <div>
+        <MintNft />
+      </div>
+    );
+  }
+
+  //direct user to play game if he have nft
+  return (
+    <div>
+      <button onClick={() => router.push("/play")}>Play</button>
+    </div>
   );
 };
 
