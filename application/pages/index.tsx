@@ -3,7 +3,7 @@ import {
   ConnectWallet,
   useAddress,
   useOwnedNFTs,
-  useEditionDrop,
+  useContract,
   darkTheme,
   lightTheme,
 } from "@thirdweb-dev/react";
@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import MintNft from "../components/MintNft";
 
 const Home: NextPage = () => {
-  const editionDrop = useEditionDrop(sleepingEllie);
+  const { data: editionDrop } = useContract(sleepingEllie, "edition-drop");
   const router = useRouter();
   const address = useAddress();
 

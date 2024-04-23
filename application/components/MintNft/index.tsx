@@ -2,13 +2,13 @@ import {
   useAddress,
   useClaimNFT,
   Web3Button,
-  useEditionDrop,
+  useContract,
 } from "@thirdweb-dev/react";
 import React from "react";
 import { sleepingEllie } from "../../constants/contractAdresses";
 
 export default function MintNft() {
-  const editionDrop = useEditionDrop(sleepingEllie);
+  const { data: editionDrop } = useContract(sleepingEllie, "edition-drop");
   const { mutate: claim } = useClaimNFT(editionDrop);
   const address = useAddress();
 

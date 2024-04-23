@@ -1,10 +1,4 @@
-import {
-  useAddress,
-  useContract,
-  useEditionDrop,
-  useToken,
-  ConnectWallet,
-} from "@thirdweb-dev/react";
+import { useAddress, useContract, ConnectWallet } from "@thirdweb-dev/react";
 import React from "react";
 import loading from "../components/GamePlay/loading";
 import {
@@ -13,14 +7,20 @@ import {
   sleepingEllie,
   minning,
 } from "../constants/contractAdresses";
+import Loading from "../components/GamePlay/loading";
+import Shop from "../components/GamePlay/shop";
+import Rewards from "../components/GamePlay/reward";
+import Equipped from "../components/GamePlay/equipped";
+import OwnedHammer from "../components/GamePlay/ownedHammer";
+
 import styles from "../styles/Home.module.css";
 
 export default function Play() {
   const address = useAddress();
   const { contract: minningContract } = useContract(minning);
-  const ellieContract = useEditionDrop(sleepingEllie);
-  const hammmerContract = useEditionDrop(Hammer);
-  const sapphireContract = useToken(sapphireToken);
+  const { data: ellieContract } = useContract(sleepingEllie, "edition-drop");
+  const { data: hammmerContract } = useContract(Hammer, "edition-drop");
+  const { data: sapphireContract } = useContract(sapphireToken, "token");
 
   // Wallet Connect
   if (!address) {
@@ -38,12 +38,12 @@ export default function Play() {
       sapphireContract ? (
         <div>
           <Equipped
-            minningContract={minningContract}
+            miningContract={minningContract}
             ellieContract={ellieContract}
-            hammmerContract={hammmerContract}
+            hammerContract={hammmerContract}
           />
           <Rewards
-            minningContract={minningContract}
+            miningContract={minningContract}
             sapphireContract={sapphireContract}
           />
         </div>
