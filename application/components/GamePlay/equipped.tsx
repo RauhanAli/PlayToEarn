@@ -8,7 +8,7 @@ import {
 import { useContract, NFT } from "@thirdweb-dev/react";
 import contrctMappingResponse from "../../types/contractMappingResponse";
 import Gameplay from "./playAnnimation";
-
+import styles from "../../styles/game.module.css";
 type Props = {
   miningContract: SmartContract<any>;
   ellieContract: any;
@@ -85,6 +85,11 @@ export default function Equipped({
           width={64}
           alt="character-mining"
         />
+        {/* <div className={styles.gameContainer}>
+          <div className={styles.ellie}></div>
+          <div className={styles.obstacle}></div>
+          <div className={styles.gem}></div>
+        </div> */}
         <Gameplay hammer={hammer} />
       </div>
     </div>

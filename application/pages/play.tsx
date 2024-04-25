@@ -56,7 +56,10 @@ export default function Play() {
         <>
           <p>Your Owned Hammer</p>
           <div>
-            <OwnedHammer />
+            <OwnedHammer
+              miningContract={minningContract}
+              hammerContract={hammmerContract}
+            />
           </div>
         </>
       ) : (
@@ -66,7 +69,7 @@ export default function Play() {
       {hammmerContract && sapphireContract ? (
         <div>
           card to display hammers
-          <Shop />
+          <Shop hammerContract={hammmerContract} />
         </div>
       ) : (
         <Loading />

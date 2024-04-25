@@ -36,7 +36,9 @@ export default function Rewards({ miningContract, sapphireContract }: Props) {
   // const { mutate: claim } = useContractWrite(miningContract, "calim");
 
   return (
-    <div>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <p>Your Gold Gems</p>
       {tokenMetaData ? (
         <ThirdwebNftMedia
